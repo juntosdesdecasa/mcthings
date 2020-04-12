@@ -5,6 +5,7 @@ from .thing import Thing
 
 class BlocksGallery(Thing):
 
+    # https://www.minecraftinfo.com/idlist.htm
     MAX_BLOCK_NUMBER = 247
 
     def build(self):
