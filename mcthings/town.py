@@ -1,10 +1,10 @@
 import mcpi
 
-from .object import Object
+from .thing import Thing
 from .house import House
 
 
-class Town(Object):
+class Town(Thing):
 
     houses = 4
     house_width = 5

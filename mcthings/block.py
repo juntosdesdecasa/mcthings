@@ -1,7 +1,7 @@
-from .object import Object
+from .thing import Thing
 
 
-class Block(Object):
+class Block(Thing):
 
     def build(self):
         self.server.setBlock(self.position.x, self.position.y,

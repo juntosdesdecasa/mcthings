@@ -1,10 +1,10 @@
 import mcpi
 
-from .object import Object
+from .thing import Thing
 from .house import House
 
 
-class Building(Object):
+class Building(Thing):
 
     floors = 10
     width = 10

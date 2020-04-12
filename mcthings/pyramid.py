@@ -1,7 +1,7 @@
-from .object import Object
+from .thing import Thing
 
 
-class Pyramid(Object):
+class Pyramid(Thing):
 
     height = 10
 

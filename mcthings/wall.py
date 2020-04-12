@@ -1,7 +1,7 @@
-from .object import Object
+from .thing import Thing
 
 
-class Wall(Object):
+class Wall(Thing):
     height = 5
     length = 10
     width = 2

@@ -1,9 +1,9 @@
 import mcpi
 
-from .object import Object
+from .thing import Thing
 
 
-class House(Object):
+class House(Thing):
 
     height = 3
     width = 5

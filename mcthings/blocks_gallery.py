@@ -1,9 +1,9 @@
 import mcpi
 
-from .object import Object
+from .thing import Thing
 
 
-class BlocksGallery(Object):
+class BlocksGallery(Thing):
 
     MAX_BLOCK_NUMBER = 247
 

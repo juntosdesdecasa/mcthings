@@ -1,7 +1,7 @@
 import mcpi
 
 
-class Object:
+class Thing:
     """ Base class for all objects in mcthings library """
 
     block = None

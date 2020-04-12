@@ -1,10 +1,10 @@
 import mcpi
 
-from .object import Object
+from .thing import Thing
 from .wall import Wall
 
 
-class TownWall(Object):
+class TownWall(Thing):
 
     height = 3
     wall_space = 5
