@@ -12,7 +12,10 @@
 #
 import os
 import sys
+# For autodoc to work
 sys.path.insert(0, os.path.abspath('..'))
+# For API doc to be generated
+os.system("sphinx-apidoc -f -o . ../mcthings")
 
 
 # -- Project information -----------------------------------------------------
