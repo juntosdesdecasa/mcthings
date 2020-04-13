@@ -1,4 +1,4 @@
-import mcpi
+import mcpi.block
 
 
 class Thing:
@@ -15,9 +15,19 @@ class Thing:
         self.server = server
 
     def build(self):
+        """
+        Build the thing and show it in Minecraft at position coordinates.
+
+        :return:
+        """
         pass
 
     def clean(self):
+        """
+        Remove the thing from Minecraft
+
+        :return:
+        """
         block = self.block
         self.block = self.block_empty
         self.build()
