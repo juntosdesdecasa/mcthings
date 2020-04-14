@@ -18,7 +18,7 @@ def main():
         mc.postToChat("Building a blocks gallery with all available blocks")
         pos = mc.entity.getTilePos(mc.getPlayerEntityId(BUILDER_NAME))
 
-        blocks = BlocksGallery(mcpi.block.BRICK_BLOCK, pos, mc)
+        blocks = BlocksGallery(mc, pos)
         blocks.build()
 
     except mcpi.connection.RequestError:

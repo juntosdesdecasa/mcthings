@@ -4,14 +4,22 @@ import mcpi.block
 class Thing:
     """ Base class for all objects in mcthings library """
 
-    block = None
+    block = mcpi.block.BRICK_BLOCK
     block_empty = mcpi.block.AIR
-    position = None
     server = None
 
-    def __init__(self, block=None, position=None, server=None):
-        self.block = block
-        self.position = position
+    @property
+    def position(self):
+        return self._position
+
+    def __init__(self, server=None, position=None):
+        """
+        Create a thing
+        :param server: Minecraft server in format host:port
+        :param position: build position
+        """
+
+        self._position = position
         self.server = server
 
     def build(self):
@@ -22,12 +30,13 @@ class Thing:
         """
         pass
 
-    def clean(self):
+    def unbuild(self):
         """
-        Remove the thing from Minecraft
+        Unbuild the thing in Minecraft.
 
         :return:
         """
+
         block = self.block
         self.block = self.block_empty
         self.build()

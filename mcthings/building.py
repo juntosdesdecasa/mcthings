@@ -17,7 +17,7 @@ class Building(Thing):
         house_pos = mcpi.vec3.Vec3(init_x, init_y, init_z)
 
         for i in range(0, self.floors):
-            house = House(self.block, house_pos, self.server)
+            house = House( self.server, house_pos)
             house_pos.y = house.height * i
             house.width = self.width
             house.build()

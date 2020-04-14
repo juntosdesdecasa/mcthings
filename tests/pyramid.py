@@ -19,7 +19,8 @@ def main():
         mc.postToChat("Building a pyramid")
         pos = mc.entity.getTilePos(mc.getPlayerEntityId(BUILDER_NAME))
 
-        pyramid = Pyramid(mcpi.block.SAND, pos, mc)
+        pyramid = Pyramid(mc, pos)
+        pyramid.block = mcpi.block.SAND
         pyramid.build()
 
     except mcpi.connection.RequestError:

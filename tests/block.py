@@ -20,7 +20,7 @@ def main():
         pos = mc.entity.getTilePos(mc.getPlayerEntityId(BUILDER_NAME))
         pos.x += 1
 
-        block = Block(mcpi.block.BRICK_BLOCK, pos, mc)
+        block = Block(mc, pos)
         block.build()
 
     except mcpi.connection.RequestError:

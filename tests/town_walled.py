@@ -23,12 +23,14 @@ def main():
 
         wall_thick = 1
 
-        town = Town(mcpi.block.BEDROCK, pos, mc)
+        town = Town(mc, pos)
+        town.block = mcpi.block.BEDROCK
         town.build()
         # Position the wall to round the town
         pos.x += wall_thick + town.space + town.house_length
         pos.z -= (town.space + wall_thick)
-        town_wall = TownWall(mcpi.block.BRICK_BLOCK, pos, mc)
+        town_wall = TownWall(mc, pos)
+        town_wall.block = mcpi.block.BRICK_BLOCK
         town_wall.town = town
         town_wall.thick = wall_thick
         town_wall.build()

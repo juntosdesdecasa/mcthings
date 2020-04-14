@@ -19,7 +19,8 @@ def main():
         mc.postToChat("Building a town")
         pos = mc.entity.getTilePos(mc.getPlayerEntityId(BUILDER_NAME))
 
-        town = Town(mcpi.block.BEDROCK, pos, mc)
+        town = Town(mc, pos)
+        town.block = mcpi.block.BEDROCK
         town.build()
 
     except mcpi.connection.RequestError:

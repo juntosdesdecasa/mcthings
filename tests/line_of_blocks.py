@@ -25,37 +25,37 @@ def main():
         block_pos = mcpi.vec3.Vec3(pos.x+1, pos.y, pos.z)
         for x in range(0, blocks_number):
             block_pos.x += 1
-            Block(mcpi.block.BRICK_BLOCK, block_pos, mc).build()
+            Block(mc, block_pos).build()
 
         # Creamos una línea en x decrecientes
         block_pos = mcpi.vec3.Vec3(pos.x+1, pos.y, pos.z)
         for x in range(1, blocks_number):
             block_pos.x -= 1
-            Block(mcpi.block.BRICK_BLOCK, block_pos, mc).build()
+            Block(mc, block_pos).build()
 
         # Creamos una línea en y crecientes
         block_pos = mcpi.vec3.Vec3(pos.x+1, pos.y, pos.z)
         for y in range(1, blocks_number):
             block_pos.y += 1
-            Block(mcpi.block.BRICK_BLOCK, block_pos, mc).build()
+            Block(mc, block_pos).build()
 
         # Creamos una línea en y decrecientes
         block_pos = mcpi.vec3.Vec3(pos.x+1, pos.y, pos.z)
         for y in range(1, blocks_number):
             block_pos.y -= 1
-            Block(mcpi.block.BRICK_BLOCK, block_pos, mc).build()
+            Block(mc, block_pos).build()
 
         # Creamos una línea en z crecientes
         block_pos = mcpi.vec3.Vec3(pos.x+1, pos.y, pos.z)
         for z in range(1, blocks_number):
             block_pos.z += 1
-            Block(mcpi.block.BRICK_BLOCK, block_pos, mc).build()
+            Block(mc, block_pos).build()
 
         # Creamos una línea en z decrecientes
         block_pos = mcpi.vec3.Vec3(pos.x+1, pos.y, pos.z)
         for z in range(1, blocks_number):
             block_pos.z -= 1
-            Block(mcpi.block.BRICK_BLOCK, block_pos, mc).build()
+            Block(mc, block_pos).build()
 
     except mcpi.connection.RequestError:
         print("Can't connect to Minecraft server " + MC_SEVER_HOST)

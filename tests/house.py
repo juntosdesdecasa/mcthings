@@ -19,7 +19,7 @@ def main():
         pos = mc.entity.getTilePos(mc.getPlayerEntityId(BUILDER_NAME))
         pos.x += 1
 
-        house = House(mcpi.block.BRICK_BLOCK, pos, mc)
+        house = House(mc, pos)
         house.build()
 
     except mcpi.connection.RequestError:
