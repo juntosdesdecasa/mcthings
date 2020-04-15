@@ -5,6 +5,9 @@ from .wall import Wall
 
 
 class TownWall(Thing):
+    """
+    Build a block plane and empty it to create the wall
+    """
 
     height = 3
     wall_space = 5
@@ -17,56 +20,26 @@ class TownWall(Thing):
         if self.town is None:
             raise RuntimeError("Town is not defined")
 
-        # Create a wall around the town: 4 walls are needed
+        self._position = self.town.position
+        self._end_position = self.town.end_position
 
-        # The height is the same always
-        wall_init_y = self.position.y
+        init_x = self.town.position.x - self.wall_space - self.thick
+        init_y = self.town.position.y
+        init_z = self.town.position.z - self.wall_space - self.thick
 
-        wall_width = self.town.houses * (self.town.house_width + self.town.space) - self.town.space \
-                     + 2 * self.wall_space
+        end_x = self.town.end_position.x + self.wall_space + self.thick
+        end_y = self.town.end_position.y
+        end_z = self.town.end_position.z + self.wall_space + self.thick
 
-        wall_length = self.town.house_length + 2 * self.wall_space
+        self.server.setBlocks(
+            init_x, init_y, init_z,
+            end_x, end_y, end_z,
+            self.block)
 
-        # First wall
-        wall1_init_x = self.position.x
-        wall1_init_z = self.position.z
-        wall_pos = mcpi.vec3.Vec3(wall1_init_x, wall_init_y, wall1_init_z)
-        wall = Wall(self.server, wall_pos)
-        wall.block = self.block
-        wall.height = self.height
-        wall.length = self.thick
-        wall.width = wall_width + self.thick
-        wall.build()
-
-        # Second wall
-        wall2_init_x = wall1_init_x + (self.thick-1)
-        wall2_init_z = wall1_init_z + wall.width
-        wall_pos = mcpi.vec3.Vec3(wall2_init_x, wall_init_y, wall2_init_z)
-        wall = Wall(self.server, wall_pos)
-        wall.block = self.block
-        wall.height = self.height
-        wall.length = -(wall_length+2*self.thick-1)
-        wall.width = self.thick
-        wall.build()
-
-        # Third wall
-        wall3_init_x = wall2_init_x + (wall.length-1)
-        wall3_init_z = wall2_init_z
-        wall_pos = mcpi.vec3.Vec3(wall3_init_x, wall_init_y, wall3_init_z)
-        wall = Wall(self.server, wall_pos)
-        wall.block = self.block
-        wall.height = self.height
-        wall.length = self.thick
-        wall.width = -(wall_width+self.thick-1)
-        wall.build()
-
-        # Fourth wall
-        wall4_init_x = wall3_init_x
-        wall4_init_z = wall3_init_z + (wall.width-1)
-        wall_pos = mcpi.vec3.Vec3(wall4_init_x, wall_init_y, wall4_init_z)
-        wall = Wall(self.server, wall_pos)
-        wall.block = self.block
-        wall.height = self.height
-        wall.length = wall_length + self.thick + self.thick
-        wall.width = self.thick
-        wall.build()
+        # Fill the prism with air to became a rectangular wall
+        self.server.setBlocks(
+            init_x + self.thick, init_y, init_z + self.thick,
+            end_x - self.thick,
+            end_y,
+            end_z - self.thick,
+            mcpi.block.AIR)

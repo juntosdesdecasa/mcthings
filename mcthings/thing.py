@@ -1,4 +1,5 @@
 import mcpi.block
+import mcpi.vec3
 
 
 class Thing:
@@ -6,7 +7,7 @@ class Thing:
 
     block = mcpi.block.BRICK_BLOCK
     """ block type used by the thing. Default to BRICK_BLOCK"""
-    block_empty = mcpi.block.AIR
+    _block_empty = mcpi.block.AIR
 
     @property
     def position(self):
@@ -30,7 +31,10 @@ class Thing:
         :param position: build position
         """
 
-        self._position = position
+        self._end_position = None
+        self._position = None
+        if position:
+            self._position = mcpi.vec3.Vec3(position.x, position.y, position.z)
         self._server = server
 
     def build(self):
@@ -49,6 +53,6 @@ class Thing:
         """
 
         block = self.block
-        self.block = self.block_empty
+        self.block = self._block_empty
         self.build()
         self.block = block

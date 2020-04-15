@@ -2,6 +2,7 @@ import sys
 
 import mcpi.block
 import mcpi.minecraft
+from mcpi.vec3 import Vec3
 
 
 from mcthings.town_wall import TownWall
@@ -21,19 +22,24 @@ def main():
         pos = mc.entity.getTilePos(mc.getPlayerEntityId(BUILDER_NAME))
         pos.x += 10
 
-        wall_thick = 1
-
         town = Town(mc, pos)
-        town.block = mcpi.block.BEDROCK
+        town.houses = 3
+        town.block = mcpi.block.WOOD
+        town.house_width = 10
+        town.house_length = 10
+        town.house_height = 10
         town.build()
-        # Position the wall to round the town
-        pos.x += wall_thick + town.space + town.house_length
-        pos.z -= (town.space + wall_thick)
-        town_wall = TownWall(mc, pos)
-        town_wall.block = mcpi.block.BRICK_BLOCK
+
+        # Build the wall to round the town
+        town_wall = TownWall(mc)
+        town_wall.block = mcpi.block.GOLD_BLOCK
         town_wall.town = town
-        town_wall.thick = wall_thick
+        town_wall.thick = 4
+        town_wall.height = 10
         town_wall.build()
+
+        # Rebuild the town because it is removed by the wall
+        town.build()
 
     except mcpi.connection.RequestError:
         print("Can't connect to Minecraft server " + MC_SEVER_HOST)
