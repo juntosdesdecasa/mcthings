@@ -8,6 +8,7 @@ class TownWall(Thing):
 
     height = 3
     wall_space = 5
+    """Space between the wall and the houses in the town"""
     thick = 1
     town = None
 

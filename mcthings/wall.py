@@ -5,7 +5,6 @@ class Wall(Thing):
     height = 5
     length = 10
     width = 2
-    backwards = False
 
     def build(self):
         self.server.setBlocks(

@@ -20,7 +20,7 @@ def main():
 
         building = Building(mc, pos)
         building.block = mcpi.block.BEDROCK
-        building.unbuild()
+        building.build()
 
     except mcpi.connection.RequestError:
         print("Can't connect to Minecraft server " + MC_SEVER_HOST)

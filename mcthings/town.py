@@ -10,7 +10,9 @@ class Town(Thing):
     house_width = 5
     house_length = 5
     house_height = 3
-    space = 3  # space between houses
+    space = 3
+    """space between the town houses"""
+
 
     def build(self):
         init_x = self.position.x
