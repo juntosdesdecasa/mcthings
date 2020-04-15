@@ -24,5 +24,6 @@ class Town(Thing):
             house.width = self.house_width
             house.length = self.house_length
             house.height = self.house_height
+            house.block = self.block
             house.build()
             house_pos.z += self.house_width + self.space

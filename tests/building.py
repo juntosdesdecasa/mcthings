@@ -19,7 +19,8 @@ def main():
         pos = mc.entity.getTilePos(mc.getPlayerEntityId(BUILDER_NAME))
 
         building = Building(mc, pos)
-        building.build()
+        building.block = mcpi.block.BEDROCK
+        building.unbuild()
 
     except mcpi.connection.RequestError:
         print("Can't connect to Minecraft server " + MC_SEVER_HOST)
