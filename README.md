@@ -7,7 +7,7 @@ on [mcpi library](https://github.com/martinohanlon/mcpi).
 [This is the reference notebook](https://github.com/juntosdesdecasa/minecraft/blob/develop/server/data/python/scene0_10.ipynb)
 with a complete sample. And there is a [intro video tutorial](https://www.youtube.com/watch?v=p6NUFdUbcYk&t=2s) and [a more complete one](https://www.youtube.com/watch?v=teGjAXomBVs&t=4s).
 
-A Thing is a built based on blocks: [Pyramid](mcthings/pyramid.py), [River](mcthings/river.py),
+A Thing is a built based on blocks (voxels based on cubes): [Pyramid](mcthings/pyramid.py), [River](mcthings/river.py),
 [House](mcthings/house.py), [Fence](mcthings/fence.py)
 and may others. All the Things share the [Thing API](mcthings/thing.py). 
 A Thing can be [decorated](https://twitter.com/acstw/status/1265510248892239873)
