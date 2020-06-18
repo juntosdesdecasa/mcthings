@@ -6,6 +6,7 @@
 import logging
 import unittest
 
+from mcpi.block import Block
 from mcpi.vec3 import Vec3
 
 from mcthings.collage import Collage
@@ -17,14 +18,16 @@ class TestBlocks(TestBaseThing):
     """Test Collage Thing"""
 
     def test_build(self):
-        World.server.postToChat("Building collage")
+        self.renderer.server._mc.postToChat("Building collage")
 
         self.pos.z += 1
-        blocks = Collage(self.pos)
+        blocks = Collage(self.pos, self.renderer)
         blocks.build()
+        assert len(blocks._chunks_memory) == 24
+        assert blocks._chunks_memory[23].blocks_ids[0] == Block(42)
 
         self.pos.z += 10
-        blocks = Collage(self.pos)
+        blocks = Collage(self.pos, self.renderer)
         blocks.build()
 
         blocks.move(Vec3(self.pos.x+5, self.pos.y, self.pos.z))

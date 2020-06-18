@@ -7,9 +7,10 @@ import mcpi.block
 import mcpi.vec3
 
 from ._version import __version__
-from .scene import Scene
 
-from .utils import build_schematic_nbt, extract_region
+from .memory_chunk import MemoryChunk
+from .scene import Scene
+from .utils import build_schematic_nbt, extract_region, size_region
 from .world import World
 
 
@@ -21,20 +22,24 @@ class Thing:
     _block_empty = mcpi.block.AIR
     """ block type used to remove blocks in this Thing """
 
-    def __init__(self, position, parent=None, scene=None):
+    def __init__(self, position, renderer, parent=None, scene=None):
         """
         Create a thing
         :param position: build position
         :param parent: parent Thing in which this one is included
+        :param renderer: renderer to use to render the Thing
         :param scene: scene in which this Thing is included
         """
 
+        self._chunks_memory = []  # List of MemoryChunks
+        self._chunks_positions = []  # List of positions of the chunks
+        self._children = []
+        self._decorators = []
         self._end_position = None
         self._parent = parent
-        self._children = []
         self._position = None
-        self._decorators = []
         self._scene = scene
+        self._renderer = renderer
 
         if position:
             self._position = mcpi.vec3.Vec3(position.x, position.y, position.z)
@@ -78,12 +83,55 @@ class Thing:
         """ Add a children to this Thing  """
         self._children.append(child)
 
+    def set_block(self, pos, block, data=None):
+        self._chunks_memory.append(MemoryChunk(size_region(pos, pos), [block], [data]))
+        self._chunks_positions.append(pos)
+
+    def set_blocks(self, init_pos, end_pos, block, data=None):
+
+        def blocks_in_cuboid(min_pos, max_pos):
+            size = 0
+            size_x = max_pos.x - min_pos.x + 1
+            size_y = max_pos.y - min_pos.y + 1
+            size_z = max_pos.z - min_pos.z + 1
+            for y in range(0, size_y):
+                for z in range(0, size_z):
+                    for x in range(0, size_x):
+                        size += 1
+            return size
+
+        blocks = [block for i in range(0, blocks_in_cuboid(init_pos, end_pos))]
+        data = [data for i in range(0, blocks_in_cuboid(init_pos, end_pos))]
+
+        self._chunks_memory.append(MemoryChunk(size_region(init_pos, end_pos), blocks, data))
+        self._chunks_positions.append(init_pos)
+
+    def create(self):
+        """
+        Create the Thing in memory (BlocksMemory)
+        :return:
+        """
+
+    def render(self):
+        """
+        Render the Thing from memory (BlocksMemory) to show it
+
+        :param renderer: renderer to use to show the Thing
+        :return:
+        """
+
+        for i in range(0, len(self._chunks_memory)):
+            self._renderer.render(self._chunks_memory[i], self._chunks_positions[i])
+
     def build(self):
         """
-        Build the thing and show it in Minecraft at position coordinates
+        Build the thing and show it using the renderer at position coordinates
 
         :return:
         """
+
+        self.create()
+        self.render()
 
     def unbuild(self):
         """
@@ -111,7 +159,7 @@ class Thing:
 
     def rotate(self, degrees):
         """
-        Rotate the thing in the x,z space. Blocks data is not preserved.
+        Rotate the thing in the x,z space using the memory chunks.
 
         :param degrees: degrees to rotate (90, 180, 270)
         :return:
@@ -132,31 +180,28 @@ class Thing:
             return pos_z * cos_degrees + pos_x * sin_degrees
 
         if self.end_position is None:
-            self.build()
+            raise RuntimeError("Can rotate a thing %s without the end_position" % self)
 
-        # Rotate all the blocks in the Thing
-        min_pos, max_pos = self.find_bounding_box()
-        size_x = max_pos.x - min_pos.x + 1
-        size_y = max_pos.y - min_pos.y + 1
-        size_z = max_pos.z - min_pos.z + 1
+        for i in range(0, len(self._chunks_memory)):
+            chunk = self._chunks_memory[i]
+            chunk_pos = self._chunks_positions[i]
 
-        # Get all blocks to be rotated
-        blocks_to_rotate, data = extract_region(min_pos, max_pos)
-
-        # Remove all blocks
-        self.unbuild()
-
-        # Add the rotated blocks
-        for y in range(0, size_y):
-            for z in range(0, size_z):
-                for x in range(0, size_x):
-                    i = x + size_x * z + (size_x * size_z) * y
-                    b = blocks_to_rotate[i]
-                    if b != 0:
-                        rotated_x = min_pos.x + rotate_x(x, z)
-                        rotated_z = min_pos.z + rotate_z(x, z)
-                        World.server.setBlock(rotated_x, min_pos.y + y, rotated_z, b)
-                        self._end_position = mcpi.vec3.Vec3(rotated_x, min_pos.y + y, rotated_z)
+            # Add the rotated blocks
+            for y in range(0, chunk.size.y):
+                for z in range(0, chunk.size.z):
+                    for x in range(0, chunk.size.x):
+                        i = x + chunk.size.x * z + (chunk.size.x * chunk.size.z) * y
+                        b = chunk.blocks_ids[i]
+                        d = chunk.blocks_data[i]
+                        rotated_x = chunk_pos.x + rotate_x(x, z)
+                        rotated_z = chunk_pos.z + rotate_z(x, z)
+                        # TODO: remove the not rotated block
+                        # The final order of the blocks must follow the
+                        # rotated_y -> rotated_z -> rotated_x
+                        # We can save all block position and store them ordered later
+                        # But it is needed only in set_blocks cases
+                        self.set_block(mcpi.Vec3(rotated_x, chunk_pos.y + y, rotated_z), b, d)
+                        self._end_position = mcpi.vec3.Vec3(rotated_x, chunk_pos.y + y, rotated_z)
 
     def to_schematic(self, file_path, blocks_data=False):
         """

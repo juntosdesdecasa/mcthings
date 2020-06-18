@@ -4,7 +4,6 @@
 from mcpi.vec3 import Vec3
 
 from .thing import Thing
-from .world import World
 
 
 class Blocks(Thing):
@@ -12,10 +11,10 @@ class Blocks(Thing):
     height = 2  # y
     length = 4  # z
 
-    def build(self):
+    def create(self):
         p = self.position
-        World.server.setBlocks(p.x, p.y, p.z,
-                               p.x + self.width - 1, p.y + self.height - 1, p.z + self.length - 1,
-                               self.block)
+        self.set_blocks(Vec3(p.x, p.y, p.z),
+                        Vec3(p.x + self.width - 1, p.y + self.height - 1, p.z + self.length - 1),
+                        self.block)
 
         self._end_position = Vec3(p.x + self.width - 1, p.y + self.height - 1, p.z + self.length - 1)

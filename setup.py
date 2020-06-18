@@ -26,7 +26,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 setup(
     name='mcthings',
     version=version,
-    packages=['mcthings', 'mcthings.decorators'],
+    packages=['mcthings', 'mcthings.core', 'mcthings.decorators'],
     include_package_data=True,
     license='ASL',
     description='McThings is a python library for building things in Minecraft',

@@ -19,7 +19,7 @@ class TestRotateBlock(TestBaseThing):
     """ Test to rotate Blocks """
 
     def test_build(self):
-        World.server.postToChat("Building two blocks")
+        self.renderer.server._mc.postToChat("Building two blocks and rotate")
 
         pos = self.pos
 
@@ -35,8 +35,9 @@ class TestRotateBlock(TestBaseThing):
         blocks.width = 7
         blocks.height = 2
         blocks.length = 3
-        blocks.build()
+        blocks.create()
         blocks.rotate(90)
+        blocks.render()
 
         # Check that the blocks start and end point are correct
         init_blocks = Blocks(blocks.position)

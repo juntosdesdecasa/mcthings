@@ -7,7 +7,9 @@ import unittest
 
 import mcpi
 
-from mcthings.server import Server
+from mcthings.renderers.raspberry_pi import _Server
+
+from mcthings.renderers.raspberry_pi import RaspberryPi
 from mcthings.world import World
 
 
@@ -21,8 +23,11 @@ class TestBaseThing(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.renderer = RaspberryPi(cls.MC_SEVER_HOST, cls.MC_SEVER_PORT)
+
         try:
-            World.connect(Server(cls.MC_SEVER_HOST, cls.MC_SEVER_PORT))
+            # TODO: remove this legacy code
+            World.connect(_Server(cls.MC_SEVER_HOST, cls.MC_SEVER_PORT))
         except mcpi.connection.RequestError:
             logging.error("Can't connect to Minecraft server " + cls.MC_SEVER_HOST)
             sys.exit(1)

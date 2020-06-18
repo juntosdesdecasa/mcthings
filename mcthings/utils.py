@@ -5,6 +5,7 @@ import logging
 from datetime import datetime
 
 import mcpi
+from mcpi.vec3 import Vec3
 from nbt.nbt import NBTFile, TAG_List, TAG_Int, TAG_Short, TAG_Byte_Array, TAG_String
 
 from mcthings.world import World
@@ -24,7 +25,15 @@ def size_region(init_pos, end_pos):
     size_z = end_pos.z - init_pos.z + 1
     size_y = end_pos.y - init_pos.y + 1
 
-    return size_x, size_y, size_z
+    return Vec3(size_x, size_y, size_z)
+
+def join_memory_chunks(thing):
+    """
+    Join all memory chunks in a common cuboid
+
+    :param thing:
+    :return: a chunk memory with all the blocks in
+    """
 
 
 def extract_region(init_pos, end_pos):
@@ -34,7 +43,7 @@ def extract_region(init_pos, end_pos):
     :return: bytearrays for blocks ids and block data
     """
 
-    (size_x, size_y, size_z) = size_region(init_pos, end_pos)
+    size = size_region(init_pos, end_pos)
 
     blocks = World.server.getBlocks(init_pos.x, init_pos.y, init_pos.z,
                                     end_pos.x, end_pos.y, end_pos.z)
@@ -43,17 +52,17 @@ def extract_region(init_pos, end_pos):
     # The order in getBlocks is z, x, y and for a Schematic it must be x, z, y
     block_list_ordered = []
 
-    for y in range(0, size_y):
+    for y in range(0, size.y):
         x_by_z = []  # x, z plane for y
 
-        for x in range(0, size_x):
+        for x in range(0, size.x):
             z_row = []
-            for z in range(0, size_z):
-                z_row.append(blocks_list[(x * size_z + z) + (size_x * size_z) * y])
+            for z in range(0, size.z):
+                z_row.append(blocks_list[(x * size.z + z) + (size.x * size.z) * y])
             x_by_z.append(z_row)
 
-        for z in range(0, size_z):
-            for x in range(0, size_x):
+        for z in range(0, size.z):
+            for x in range(0, size.x):
                 block_list_ordered.append(x_by_z[x][z])
 
     # Create the data_bytes
@@ -72,15 +81,15 @@ def extract_region_with_data(init_pos, end_pos):
 
     :return: bytearrays for blocks ids and block data
     """
-    (size_x, size_y, size_z) = size_region(init_pos, end_pos)
+    size = size_region(init_pos, end_pos)
 
     blocks_bytes = bytearray()
     data_bytes = bytearray()
 
     # Use the same loop than reading Schematic format: x -> z -> y
-    for y in range(0, size_y):
-        for z in range(0, size_z):
-            for x in range(0, size_x):
+    for y in range(0, size.y):
+        for z in range(0, size.z):
+            for x in range(0, size.x):
                 block_pos = mcpi.vec3.Vec3(init_pos.x + x, init_pos.y + y, init_pos.z + z)
                 block = World.server.getBlockWithData(block_pos.x, block_pos.y, block_pos.z)
                 blocks_bytes.append(block.id)
@@ -99,18 +108,18 @@ def build_schematic_nbt(init_pos, end_pos, block_data=False):
 
     :return: The NBT object with the Schematic
     """
-    (size_x, size_y, size_z) = size_region(init_pos, end_pos)
+    size = size_region(init_pos, end_pos)
 
     # Profiling of Schematics export
     app_init = datetime.now()
-    logging.info("Schematic: Exporting blocks: %i" % (size_x * size_y * size_z))
+    logging.info("Schematic: Exporting blocks: %i" % (size.x * size.y * size.z))
 
     # Prepare the NBT Object
     nbtfile = NBTFile()
     nbtfile.name = "Schematic"
-    nbtfile.tags.append(TAG_Short(name="Width", value=size_x))
-    nbtfile.tags.append(TAG_Short(name="Height", value=size_y))
-    nbtfile.tags.append(TAG_Short(name="Length", value=size_z))
+    nbtfile.tags.append(TAG_Short(name="Width", value=size.x))
+    nbtfile.tags.append(TAG_Short(name="Height", value=size.y))
+    nbtfile.tags.append(TAG_Short(name="Length", value=size.z))
     nbt_blocks = TAG_Byte_Array(name="Blocks")
     nbtfile.tags.append(nbt_blocks)
     nbt_data = TAG_Byte_Array(name="Data")
