@@ -3,12 +3,9 @@
 
 import math
 
-import mcpi.block
 from mcpi.vec3 import Vec3
 
-from mcthings.block import Block
 from .decorator import Decorator
-from ..world import World
 
 
 class BorderDecorator(Decorator):
@@ -20,45 +17,44 @@ class BorderDecorator(Decorator):
 
     margin = 5  # Margin between the Thing and its border
 
-    @classmethod
-    def decorate(cls, thing):
+    def create(self):
         """
         Add a border to the Thing
 
         :return:
         """
 
-        (min_pos, max_pos) = thing.find_bounding_box()
+        (min_pos, max_pos) = self._thing.find_bounding_box()
         # The min height is always the floor of the thing position
-        if min_pos.y < thing.position.y:
-            min_pos.y = thing.position.y
+        if min_pos.y < self._thing.position.y:
+            min_pos.y = self._thing.position.y
 
-        border_width = (max_pos.x - min_pos.x) + 1 + 2 * cls.margin + 2 * 1
+        border_width = (max_pos.x - min_pos.x) + 1 + 2 * self.margin + 2 * 1
         border_width = math.ceil(border_width)
-        border_large = (max_pos.z - min_pos.z) + 1 + 2 * cls.margin + 2 * 1
+        border_large = (max_pos.z - min_pos.z) + 1 + 2 * self.margin + 2 * 1
         border_large = math.ceil(border_large)
 
-        init_pos = Vec3(min_pos.x - (cls.margin + 1), min_pos.y, min_pos.z - (cls.margin + 1))
-        end_pos = Vec3(min_pos.x + (cls.margin + 1), min_pos.y, min_pos.z + (cls.margin + 1))
+        init_pos = Vec3(min_pos.x - (self.margin + 1), min_pos.y, min_pos.z - (self.margin + 1))
+        end_pos = Vec3(min_pos.x + (self.margin + 1), min_pos.y, min_pos.z + (self.margin + 1))
 
         # Create the four borders of the Thing
         # Block by block with pre-clean so railways work
         init = init_pos
         end = Vec3(init_pos.x + border_width - 1, init_pos.y, init_pos.z)
         for x in range(0, border_width - 1):
-            World.server.setBlock(init.x + x, init.y, init.z, cls.block)
+            self.set_block(Vec3(init.x + x, init.y, init.z), self.block)
 
         init = end
         end = Vec3(init.x, init.y, init.z + border_large - 1)
         for z in range(0, border_large - 1):
-            World.server.setBlock(init.x, init.y, init.z + z, cls.block)
+            self.set_block(Vec3(init.x, init.y, init.z + z), self.block)
 
         init = end
         end = Vec3(init.x - (border_width - 1), init.y, init.z)
         for x in range(0, border_width - 1):
-            World.server.setBlock(init.x - x, init.y, init.z, cls.block)
+            self.set_block(Vec3(init.x - x, init.y, init.z), self.block)
 
         init = end
         end = Vec3(init.x, init.y, init.z - (border_large - 1))
         for z in range(0, border_large - 1):
-            World.server.setBlock(init.x, init.y, init.z - z, cls.block)
+            self.set_block(Vec3(init.x, init.y, init.z - z), self.block)

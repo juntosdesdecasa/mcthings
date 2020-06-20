@@ -12,12 +12,11 @@ class Renderer:
     with a specific engine. For example, Raspberry PI uses the Python API to do it.
     """
 
-    def render(self, memory_chunk, position):
+    def render(self, memory_chunk):
         """
         Render the blocks included in the memory_chunk at position in the world
 
         :param memory_chunk: chunk of blocks to be rendered
-        :param position: position at what to render the chunk
         :return:
         """
         pass

@@ -25,7 +25,7 @@ class TestBlock(TestBaseThing):
         block = Block(pos, self.renderer)
         block.build()
 
-        assert len(block._chunks_memory[0].blocks_ids) == 1
+        assert len(block._blocks_memory.blocks) == 1
 
         pos.x += 3
         block = Block(pos, self.renderer)

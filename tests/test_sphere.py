@@ -18,21 +18,21 @@ class TestSphere(TestBaseThing):
     """Test Sphere Thing"""
 
     def test_build(self):
-        World.server.postToChat("Building a sphere")
+        self.renderer.server._mc.postToChat("Building a sphere")
 
         pos = self.pos
 
         radius = 10
         pos.z += 20
 
-        sphere = Sphere(pos)
+        sphere = Sphere(pos, self.renderer)
         sphere.radius = radius
         sphere.block = mcpi.block.IRON_BLOCK
         sphere.build()
 
         World.server.postToChat("Building a hollow sphere")
         pos.x += 20
-        sphere = SphereHollow(pos)
+        sphere = SphereHollow(pos, self.renderer)
         sphere.radius = radius
         sphere.block = mcpi.block.WOOD
         sphere.build()

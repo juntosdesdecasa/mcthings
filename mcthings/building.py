@@ -13,7 +13,7 @@ class Building(Thing):
     width = 10
     house_mirror = False
 
-    def build(self):
+    def create(self):
 
         init_x = self.position.x
         init_y = self.position.y
@@ -23,11 +23,11 @@ class Building(Thing):
         init_height = init_y
 
         for i in range(0, self.floors):
-            house = House(house_pos, self)
+            house = House(house_pos, self._renderer, self)
             self.add_child(house)
             house_pos.y = house.height * i + init_height
             house.width = self.width
             house.block = self.block
             house.mirror = self.house_mirror
-            house.build()
+            house.create()
             self._end_position = house.end_position

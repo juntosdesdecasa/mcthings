@@ -23,8 +23,8 @@ class TestBlocks(TestBaseThing):
         self.pos.z += 1
         blocks = Collage(self.pos, self.renderer)
         blocks.build()
-        assert len(blocks._chunks_memory) == 24
-        assert blocks._chunks_memory[23].blocks_ids[0] == Block(42)
+        assert len(blocks._blocks_memory.blocks) == 24
+        assert blocks._blocks_memory.blocks[23].id == Block(42)
 
         self.pos.z += 10
         blocks = Collage(self.pos, self.renderer)

@@ -1,16 +1,12 @@
 # Licensed under the terms of http://www.apache.org/licenses/LICENSE-2.0
 # Author/s (©): Alvaro del Castillo
-import math
 
-import mcpi
 import mcpi.block
 from nbt import nbt
 
 from mcpi.vec3 import Vec3
 
-from mcthings.memory_chunk import MemoryChunk
 from mcthings.thing import Thing
-from mcthings.world import World
 
 
 class Schematic(Thing):
@@ -51,24 +47,15 @@ class Schematic(Thing):
         size_y = schematic["Height"].value
         size_z = schematic["Length"].value
 
-        chunk = MemoryChunk(Vec3(size_x, size_y, size_z), schematic[self._data_field], schematic[self._blocks_field])
-        self.chunks_memory.append(chunk)
+        init_pos = self.position
 
-    def rotate(self, degrees):
-        """
-        Rotate the thing in the x,z space. Blocks data is not preserved.
-
-        In a Schematic, we load the data in memory, rotate it and build it
-
-        :param degrees: degrees to rotate (90, 180, 270)
-        :return:
-        """
-
-        valid_degrees = [90, 180, 270]
-
-        if degrees not in [90, 180, 270]:
-            raise RuntimeError("Invalid degrees: %s (valid: %s) " % (degrees, valid_degrees))
-
-        self.rotate_degrees = degrees
-
-        self.build()
+        for y in range(0, size_y):
+            for z in range(0, size_z):
+                for x in range(0, size_x):
+                    i = x + size_x * z + (size_x * size_z) * y
+                    block_id = schematic[self._blocks_field][i]
+                    block_data = schematic[self._data_field][i] & 0b00001111  # lower 4 bits
+                    block_pos = Vec3(init_pos.x + x, init_pos.y + y, init_pos.z + z)
+                    if block_id in self.change_blocks:
+                        block_id = self.change_blocks[block_id]
+                    self.set_block(block_pos, block_id, block_data)

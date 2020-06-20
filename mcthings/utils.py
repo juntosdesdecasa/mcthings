@@ -27,14 +27,6 @@ def size_region(init_pos, end_pos):
 
     return Vec3(size_x, size_y, size_z)
 
-def join_memory_chunks(thing):
-    """
-    Join all memory chunks in a common cuboid
-
-    :param thing:
-    :return: a chunk memory with all the blocks in
-    """
-
 
 def extract_region(init_pos, end_pos):
     """

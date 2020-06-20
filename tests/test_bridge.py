@@ -17,11 +17,11 @@ class TestBridge(TestBaseThing):
     """Test Bridge Thing"""
 
     def test_build(self):
-        World.server.postToChat("Building bridges")
+        self.renderer.server._mc.postToChat("Building bridges")
 
         pos = self.pos
 
-        bridge = Bridge(pos)
+        bridge = Bridge(pos, self.renderer)
         bridge.large = 10
         bridge.height = 3
         bridge.width = 3
@@ -30,7 +30,8 @@ class TestBridge(TestBaseThing):
 
         pos = bridge.end_position
         pos.x += 1
-        bridge1 = Bridge(pos)
+        pos.y = bridge.position.y
+        bridge1 = Bridge(pos, self.renderer)
         bridge1.large = 10
         bridge1.block = mcpi.block.BEDROCK
         bridge1.build()

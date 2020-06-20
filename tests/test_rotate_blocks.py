@@ -6,12 +6,8 @@
 import logging
 import unittest
 
-from mcpi.vec3 import Vec3
-import mcpi.block
-
 from mcthings.blocks import Blocks
 from mcthings.collage import Collage
-from mcthings.world import World
 from tests.base import TestBaseThing
 
 
@@ -19,33 +15,33 @@ class TestRotateBlock(TestBaseThing):
     """ Test to rotate Blocks """
 
     def test_build(self):
-        self.renderer.server._mc.postToChat("Building two blocks and rotate")
+        self.renderer.server._mc.postToChat("Building two blocks")
 
         pos = self.pos
 
         pos.x += 3
-        blocks = Collage(pos)
+        blocks = Collage(pos, self.renderer)
         blocks.width = 7
         blocks.height = 2
         blocks.length = 3
         blocks.build()
 
         pos.x += 15
-        blocks = Collage(pos)
+        blocks = Collage(pos, self.renderer)
         blocks.width = 7
         blocks.height = 2
-        blocks.length = 3
+        blocks.length = 5
         blocks.create()
         blocks.rotate(90)
         blocks.render()
 
         # Check that the blocks start and end point are correct
-        init_blocks = Blocks(blocks.position)
+        init_blocks = Blocks(blocks.position, self.renderer)
         init_blocks.height = 5
         init_blocks.width = 1
         init_blocks.length = 1
         init_blocks.build()
-        end_blocks = Blocks(blocks.end_position)
+        end_blocks = Blocks(blocks.end_position, self.renderer)
         end_blocks.height = 5
         end_blocks.width = 1
         end_blocks.length = 1

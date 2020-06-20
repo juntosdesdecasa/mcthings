@@ -24,13 +24,13 @@ class TestFence(TestBaseThing):
     """Test Fence Thing"""
 
     def test_build(self):
-        World.server.postToChat("Building a walled town")
+        self.renderer.server._mc.postToChat("Building a walled town")
 
         pos = self.pos
 
         pos.x += 10
 
-        town = Town(pos)
+        town = Town(pos, self.renderer)
         town.houses = 3
         town.block = mcpi.block.WOOD
         town.house_width = 10
@@ -39,7 +39,7 @@ class TestFence(TestBaseThing):
         town.build()
 
         # Build the wall to round the town
-        fence = Fence(None)
+        fence = Fence(None, self.renderer)
         fence.block = mcpi.block.GOLD_BLOCK
         fence.thing = town
         fence.thick = 4
@@ -47,9 +47,9 @@ class TestFence(TestBaseThing):
         fence.build()
 
         pos.x += 30
-        pyr = Pyramid(pos)
+        pyr = Pyramid(pos, self.renderer)
         pyr.build()
-        fence = Fence(None)
+        fence = Fence(None, self.renderer)
         fence.thing = pyr
         fence.build()
 

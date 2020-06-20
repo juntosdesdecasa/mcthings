@@ -33,5 +33,6 @@ class TestBaseThing(unittest.TestCase):
             sys.exit(1)
 
     def setUp(self):
-        self.pos = World.server.entity.getTilePos(World.server.getPlayerEntityId(self.BUILDER_NAME))
+        server = self.renderer.server
+        self.pos = server.mc.entity.getTilePos(server.mc.getPlayerEntityId(self.BUILDER_NAME))
 

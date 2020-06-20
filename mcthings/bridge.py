@@ -5,17 +5,15 @@ from math import floor
 
 from mcpi.vec3 import Vec3
 
-from .world import World
 from .thing import Thing
 
 
 class Bridge(Thing):
-
     large = 5
     height = None
     width = 1
 
-    def build(self):
+    def create(self):
         for z in range(0, self.width):
             self.build_row(z)
 
@@ -40,10 +38,9 @@ class Bridge(Thing):
 
             final_y = y
 
-            if self.height and y >= self.height-1:
-                final_y = self.height-1
+            if self.height and y >= self.height - 1:
+                final_y = self.height - 1
 
-            World.server.setBlock(
-                self.position.x + x, self.position.y + final_y, self.position.z + z,
+            self.set_block(
+                Vec3(self.position.x + x, self.position.y + final_y, self.position.z + z),
                 self.block)
-

@@ -5,7 +5,6 @@ import mcpi
 
 from mcpi.vec3 import Vec3
 
-from .world import World
 from .thing import Thing
 
 
@@ -18,41 +17,39 @@ class House(Thing):
     door_size = 1
     mirror = False
 
-    def build(self):
+    def create(self):
 
         init_x = self.position.x
         init_y = self.position.y
         init_z = self.position.z
 
-        end_x = init_x + self.length - 1
+        end_x = init_x + self.length
         if self.mirror:
-            end_x = init_x - (self.length - 1)
-        end_y = init_y + self.height - 1
-        end_z = init_z + self.width - 1
+            end_x = init_x
+            init_x = init_x - self.length
+        end_y = init_y + self.height
+        end_z = init_z + self.width
 
-        World.server.setBlocks(
-            init_x, init_y, init_z,
-            end_x, end_y, end_z,
+        self.set_blocks(
+            Vec3(init_x, init_y, init_z),
+            Vec3(end_x, end_y, end_z),
             self.block)
 
         # Fill the cube with air so it becomes a kind of house
         init_x_empty = init_x + self.wall_width
         end_x_empty = end_x - self.wall_width
-        if self.mirror:
-            init_x_empty = init_x - self.wall_width
-            end_x_empty = end_x + self.wall_width
-        World.server.setBlocks(
-            init_x_empty, init_y, init_z + self.wall_width,
-            end_x_empty,
-            end_y - self.wall_width,
-            end_z - self.wall_width,
+        self.set_blocks(
+            Vec3(init_x_empty, init_y, init_z + self.wall_width),
+            Vec3(end_x_empty,
+                 end_y - self.wall_width,
+                 end_z - self.wall_width),
             mcpi.block.AIR)
 
-        World.server.setBlocks(
-            init_x, init_y, init_z + self.wall_width,
-            init_x + 1, init_y + self.door_size, init_z + self.door_size,
-            mcpi.block.AIR)
+        init_door_x = init_x
+        if self.mirror:
+            init_door_x = end_x
+        init_door = Vec3(init_door_x, init_y, init_z + self.wall_width)
+        end_door = Vec3(init_door_x + self.wall_width, init_y + self.door_size + 1, init_z + self.wall_width + self.door_size)
+        self.set_blocks(init_door, end_door, mcpi.block.AIR)
 
         self._end_position = Vec3(end_x, end_y, end_z)
-
-

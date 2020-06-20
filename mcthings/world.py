@@ -17,6 +17,7 @@ class World:
 
     @classmethod
     def connect(cls, server):
+        # When the create->transform->render pipeline is complete remove next line
         World.server = server.mc
         World.drawing = server.drawing
 

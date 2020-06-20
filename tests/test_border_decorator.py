@@ -26,18 +26,18 @@ class TestBorderDecorator(TestBaseThing):
     """ Test Border Decorator """
 
     def test_build(self):
-        World.server.postToChat("Building a block with a border")
+        self.renderer.server._mc.postToChat("Building a block with a border")
 
         pos = self.pos
         pos.x += 2
 
         # Add a border around an scene
-        Block(pos)
+        Block(pos, self.renderer)
         # Block(Vec3(pos.x+1,  pos.y, pos.z))
-        p = Pyramid(pos)
+        p = Pyramid(pos, self.renderer)
         p.height = 5
-        House(pos)
-        river = River(pos)
+        House(pos, self.renderer)
+        river = River(pos, self.renderer)
         river.length = 5
         init_scene = World.first_scene()
         init_scene.build()

@@ -9,7 +9,6 @@ import unittest
 import mcpi.block
 
 from mcthings.schematic import Schematic
-from mcthings.world import World
 from tests.base import TestBaseThing
 
 
@@ -17,12 +16,12 @@ class TestSchematic(TestBaseThing):
     """Test Schematic Thing"""
 
     def test_build(self):
-        World.server.postToChat("Building a schematic")
+        self.renderer.server._mc.postToChat("Loading and building a schematic")
         pos = self.pos
 
-        schematic = Schematic(pos)
+        schematic = Schematic(pos, self.renderer)
         # 2012: https://www.minecraft-schematics.com/schematic/68/
-        # schematic.file_path = "schematics/pirate-boat.schematic"
+        schematic.file_path = "schematics/pirate-boat.schematic"
         # 2017: https://www.minecraft-schematics.com/schematic/9676/
         # schematic.file_path = "schematics/chateau-fairmont.schematic"
         # schematic.file_path = "schematics/pyramid_hollow.schematic"

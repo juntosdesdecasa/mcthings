@@ -17,7 +17,7 @@ class Town(Thing):
     space = 3
     """space between the town houses"""
 
-    def build(self):
+    def create(self):
 
         init_x = self.position.x
         init_y = self.position.y
@@ -26,14 +26,14 @@ class Town(Thing):
         house_pos = mcpi.vec3.Vec3(init_x, init_y, init_z)
 
         for i in range(0, self.houses):
-            house = House(house_pos, self)
+            house = House(house_pos, self._renderer, self)
             self.add_child(house)
             house.width = self.house_width
             house.length = self.house_length
             house.height = self.house_height
             house.block = self.block
             house.mirror = self.house_mirror
-            house.build()
+            house.create()
             house_pos.z += self.house_width + self.space
 
         # Fill the end_position

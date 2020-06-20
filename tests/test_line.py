@@ -17,24 +17,24 @@ class TestLine(TestBaseThing):
     """Test Line Thing"""
 
     def test_build(self):
-        World.server.postToChat("Building a line")
+        self.renderer.server._mc.postToChat("Building a line")
 
         pos = self.pos
 
         pos.x += 1
-        line = Line(pos)
+        line = Line(pos, self.renderer)
         line.width = 2
         line.block = mcpi.block.SAND
         line.length = 10
         line.width = 1
         line.build()
 
-        line = Line(line.end_position)
+        line = Line(line.end_position, self.renderer)
         line.width = 2
         line.block = mcpi.block.STONE
         line.build()
 
-        line = Line(line.end_position)
+        line = Line(line.end_position, self.renderer)
         line.length = 10
         line.width = 2
         line.block = mcpi.block.SAND

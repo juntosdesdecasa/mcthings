@@ -4,7 +4,6 @@
 import mcpi
 from mcpi.vec3 import Vec3
 
-from .world import World
 from .thing import Thing
 
 
@@ -19,7 +18,7 @@ class Fence(Thing):
     height = None
     thing = None
 
-    def build(self):
+    def create(self):
         """
         Create a fence around the configured thing
         :return:
@@ -43,20 +42,18 @@ class Fence(Thing):
 
         self._end_position = Vec3(end_x, end_y, end_z)
 
-        World.server.setBlocks(
-            init_x, init_y, init_z,
-            end_x, end_y, end_z,
+        self.set_blocks(
+            Vec3(init_x, init_y, init_z),
+            Vec3(end_x, end_y, end_z),
             self.block)
 
         # Fill the prism with air to became a rectangular wall
-        World.server.setBlocks(
-            init_x + self.thick, init_y, init_z + self.thick,
-            end_x - self.thick,
-            end_y,
-            end_z - self.thick,
+        self.set_blocks(
+            Vec3(init_x + self.thick, init_y, init_z + self.thick),
+            Vec3(end_x - self.thick, end_y, end_z - self.thick),
             mcpi.block.AIR)
 
         # Rebuild the thing because it is destroyed when emptying the fence
         # if we are not removing the fence
         if self.block != mcpi.block.AIR:
-            self.thing.build()
+            self.thing.create()

@@ -15,13 +15,13 @@ class TestBlocksGallery(TestBaseThing):
     """Test  Thing"""
 
     def test_build(self):
-        World.server.postToChat("Building a blocks gallery with all available blocks")
+        self.renderer.server._mc.postToChat("Building a blocks gallery with all available blocks")
 
         pos = self.pos
 
         pos.x += 1
 
-        gallery = BlocksGallery(pos)
+        gallery = BlocksGallery(pos, self.renderer)
         gallery.build()
 
 

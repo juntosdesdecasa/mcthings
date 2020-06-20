@@ -15,13 +15,13 @@ class TestWall(TestBaseThing):
     """Test Wall Thing"""
 
     def test_build(self):
-        World.server.postToChat("Building a wall")
+        self.renderer.server._mc.postToChat("Building a wall")
 
         pos = self.pos
 
         pos.x += 1
 
-        wall = Wall(pos)
+        wall = Wall(pos, self.renderer)
         wall.build()
 
 

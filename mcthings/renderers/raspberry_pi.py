@@ -10,7 +10,7 @@ from mcpi.vec3 import Vec3
 from minecraftstuff import MinecraftDrawing
 
 from .renderer import Renderer
-from ..memory_chunk import MemoryChunk
+from ..blocks_memory import BlocksMemory
 
 
 class _Server:
@@ -52,67 +52,27 @@ class RaspberryPi(Renderer):
             logging.error("Can't connect to Minecraft/Minetest server %s:%s" % (host, port))
             sys.exit(1)
 
-    def render_equal_blocks_chunk(self, chunk, pos):
-        """ Render a chunk with all blocks equal and not rotating """
-        block = chunk.blocks_ids[0]
+    def render_cuboid_memory(self, memory):
+        """ Render a memory with all blocks equal in a filled cuboid """
+        block = memory.blocks[0].id
 
-        init_pos = pos
-        end_pos = Vec3(pos.x + chunk.size.x-1, pos.y + chunk.size.y-1, pos.z + chunk.size.z-1)
+        init_pos, end_pos = memory.find_init_end_pos()
 
         self.server.mc.setBlocks(init_pos.x, init_pos.y, init_pos.z,
                                  end_pos.x, end_pos.y, end_pos.z,
                                  block)
 
-    def render_chunk(self, chunk, pos):
-        """ Render chunk rotating it if needed """
+    def render_memory(self, memory):
+        """ Render memory """
 
-        size_x = chunk.end_pos.x - chunk.init_pos.x
-        size_y = chunk.end_pos.y - chunk.init_pos.y
-        size_z = chunk.end_pos.z - chunk.init_pos.z
+        for block in memory.blocks:
+            if block.data is not None:
+                self.server.mc.setBlock(block.pos.x, block.pos.y, block.pos.z, block.id, block.data)
+            else:
+                self.server.mc.setBlock(block.pos.x, block.pos.y, block.pos.z, block.id)
 
-        init_x = chunk.init_pos.x
-        init_y = chunk.init_pos.y
-        init_z = chunk.init_pos.z
-
-        blocks = chunk.blocks_ids
-        data = chunk.blocks_data
-
-        cos_degrees = math.cos(math.radians(self.rotate_degrees))
-        sin_degrees = math.sin(math.radians(self.rotate_degrees))
-
-        # TODO: Rotating must be done in memory, not in the render!
-
-        def rotate_x(pos_x, pos_z):
-            return pos_x * cos_degrees - pos_z * sin_degrees
-
-        def rotate_z(pos_x, pos_z):
-            return pos_z * cos_degrees + pos_x * sin_degrees
-
-        for y in range(0, size_y):
-            for z in range(0, size_z):
-                for x in range(0, size_x):
-                    i = x + size_x * z + (size_x * size_z) * y
-                    b = blocks[i]
-                    if b != 0:
-                        if self.block == self._block_empty:
-                            # Cleaning the schematic
-                            b = 0
-                        d = data[i] & 0b00001111  # lower 4 bits
-
-                        if b in self.change_blocks:
-                            b = self.change_blocks[b]
-
-                        if self.rotate_degrees != 0:
-                            rotated_x = init_x + rotate_x(x, z)
-                            rotated_z = init_z + rotate_z(x, z)
-                            self.server.mc.setBlock(rotated_x, init_y + y, rotated_z, b, d)
-                            # chunk.end_position = mcpi.vec3.Vec3(rotated_x, init_y + y, rotated_z)
-                        else:
-                            self.server.mc.setBlock(init_x + x, init_y + y, init_z + z, b, d)
-                            # chunk.end_position = mcpi.vec3.Vec3(init_x + x, init_y + y, init_z + z)
-
-    def render(self, chunk_memory, pos):
-        if MemoryChunk.chunk_equal(chunk_memory):
-            self.render_equal_blocks_chunk(chunk_memory, pos)
+    def render(self, blocks_memory):
+        if BlocksMemory.memory_equal(blocks_memory) and blocks_memory.is_cuboid():
+            self.render_cuboid_memory(blocks_memory)
         else:
-            self.render_chunk(chunk_memory, pos)
+            self.render_memory(blocks_memory)
