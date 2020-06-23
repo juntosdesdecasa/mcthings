@@ -5,7 +5,7 @@ import math
 
 from mcpi.vec3 import Vec3
 
-from mcthings.utils import size_region
+from mcthings.utils import size_region, find_min_max_cuboid_vertex
 
 
 class BlockMemory:
@@ -71,8 +71,8 @@ class BlocksMemory:
         cuboid = False
 
         # Check that the number of blocks needed for the filled cuboid is the same that the blocks
-        init_pos, max_pos = self.find_init_end_pos()
-        size = size_region(init_pos, max_pos)
+        init_pos, vertex_max = self.find_init_end_pos()
+        size = size_region(init_pos, vertex_max)
 
         if size.x * size.y * size.z == len(self.blocks):
             cuboid = True
@@ -141,33 +141,19 @@ class BlocksMemory:
     def set_block(self, pos, block_id, block_data=None):
         self.add(BlockMemory(block_id, block_data, pos))
 
-    def set_blocks(self, init_pos, end_pos, block_id):
+    def set_blocks(self, vertex, vertex_opposite, block_id):
         """ Add a cuboid with the same block for all blocks and without specific data """
 
         block_data = None
 
-        def find_min_max_cuboid_blocks():
-            # Find all vertex in the cuboid
-            # Find min and max blocks
-            min_pos_found = init_pos
-            max_pos_found = end_pos
+        width = abs(vertex_opposite.x - vertex.x) + 1
+        height = abs(vertex_opposite.y - vertex.y) + 1
+        length = abs(vertex_opposite.z - vertex.z) + 1
 
-            return min_pos_found, max_pos_found
+        vertex_min, vertex_max = find_min_max_cuboid_vertex(vertex, vertex_opposite)
 
-        # TODO: Find the min and max blocks given two opposite vertex
-        min_pos, max_pos = find_min_max_cuboid_blocks()
-
-        if min_pos.x > max_pos.x or \
-                min_pos.y > max_pos.y or \
-                min_pos.z > max_pos.z:
-            raise RuntimeError("Bad min an max vertex for cuboid")
-
-        size_x = max_pos.x - min_pos.x + 1
-        size_y = max_pos.y - min_pos.y + 1
-        size_z = max_pos.z - min_pos.z + 1
-
-        for y in range(0, size_y):
-            for z in range(0, size_z):
-                for x in range(0, size_x):
-                    block_pos = Vec3(min_pos.x + x, min_pos.y + y, min_pos.z + z)
+        for y in range(0, height):
+            for z in range(0, length):
+                for x in range(0, width):
+                    block_pos = Vec3(vertex_min.x + x, vertex_min.y + y, vertex_min.z + z)
                     self.set_block(block_pos, block_id, block_data)

@@ -14,4 +14,5 @@ class Blocks(Thing):
     def create(self):
         p = self.position
         self._end_position = Vec3(p.x + self.width - 1, p.y + self.height - 1, p.z + self.length - 1)
-        self.set_blocks(Vec3(p.x, p.y, p.z), self._end_position, self.block.id)
+        # self.set_blocks(Vec3(p.x, p.y, p.z), self._end_position, self.block.id)
+        self.set_blocks(self._end_position, Vec3(p.x, p.y, p.z), self.block.id)

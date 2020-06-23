@@ -32,7 +32,7 @@ class TestBlocks(TestBaseThing):
         blocks.height = 4
         blocks.length = 3
         blocks.build()
-        assert len(blocks._blocks_memory.blocks  ) == 2*3*4
+        assert len(blocks._blocks_memory.blocks) == blocks.width * blocks.height * blocks.length
 
         # check the first and last block
         init_block = Block(blocks.position)

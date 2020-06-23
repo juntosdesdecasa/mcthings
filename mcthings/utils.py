@@ -143,3 +143,74 @@ def build_schematic_nbt(init_pos, end_pos, block_data=False):
     logging.info("Schematic export finished in %.2f secs" % total_time_min)
 
     return nbtfile
+
+
+def find_min_max_cuboid_vertex(vertex, vertex_opposite):
+    """
+    Find the min vertex and the max vertex for a given cuboid
+    defined from two opposite vertexes
+
+    :param vertex: a vertex in the cuboid
+    :param vertex_opposite: the opposite vertex of the cuboid
+    :return: vertex_min, vertex_max
+    """
+
+    vertex_min = vertex_max = None
+
+    width = abs(vertex_opposite.x - vertex.x) + 1
+    height = abs(vertex_opposite.y - vertex.y) + 1
+    length = abs(vertex_opposite.z - vertex.z) + 1
+
+    # Find all vertex in the up face: up1 and up3 are already known
+    up1 = vertex_opposite
+    up3 = Vec3(vertex.x, vertex_opposite.y, vertex.z)
+    if vertex.y > vertex_opposite.y:
+        up1 = vertex
+        up3 = Vec3(vertex_opposite.x, vertex.y, vertex_opposite.z)
+    # Now we need to find the two other vertexes up2, up4
+    # Looking at up1 there are two options for up2 and up4
+    up1x1 = Vec3(up1.x + (width - 1), up1.y, up1.z)
+    up1x2 = Vec3(up1.x - (width - 1), up1.y, up1.z)
+    up1z1 = Vec3(up1.x, up1.y, up1.z + (length - 1))
+    up1z2 = Vec3(up1.x, up1.y, up1.z - (length - 1))
+    # Looking at up3 there are two options for up2 and up4
+    up3x1 = Vec3(up3.x + (width - 1), up3.y, up3.z)
+    up3x2 = Vec3(up3.x - (width - 1), up3.y, up3.z)
+    up3z1 = Vec3(up3.x, up3.y, up3.z + (length - 1))
+    up3z2 = Vec3(up3.x, up3.y, up3.z - (length - 1))
+    # The right vertex is the common one for up2 and up4
+    if up1x1 == up3z1 or up1x1 == up3z2:
+        up2 = up1x1
+    elif up1x2 == up3z1 or up1x2 == up3z2:
+        up2 = up1x2
+    else:
+        raise RuntimeError("Bad min an max vertex for cuboid")
+    if up1z1 == up3x1 or up1z1 == up3x2:
+        up4 = up1z1
+    elif up1z2 == up3x1 or up1z2 == up3x2:
+        up4 = up1z1
+    else:
+        raise RuntimeError("Bad min an max vertex for cuboid")
+
+    # Now select the min and max vertex for up face
+    x_min = x_max = up1.x  # init with a possible value
+    z_min = z_max = up1.z  # init with a possible value
+    for v in [up1, up2, up3, up4]:
+        x_max = v.x if v.x > x_max else x_max
+        x_min = v.x if v.x < x_min else x_min
+        z_max = v.z if v.z > z_max else z_max
+        z_min = v.z if v.z < z_min else z_min
+
+    # And now select the min and max vertex
+    for v in [up1, up2, up3, up4]:
+        if v.x == x_min and v.z == z_min:
+            vertex_min = Vec3(v.x, v.y - (height - 1), v.z)
+        if v.x == x_max and v.z == z_max:
+            vertex_max = Vec3(v.x, v.y, v.z)
+
+    if vertex_min is None or vertex_max is None:
+        raise RuntimeError("Bad min an max vertex for cuboid")
+
+    return vertex_min, vertex_max
+
+
