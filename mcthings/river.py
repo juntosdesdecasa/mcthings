@@ -25,7 +25,7 @@ class River(Thing):
 
         # Find the type of land block destroyed with the river
         self._block_empty = \
-            mcpi.block.Block(World.server.getBlock(init_x, self.position.y - 1, init_z), 0)
+            mcpi.block.Block(World.renderer.get_block(Vec3(init_x, self.position.y - 1, init_z)), 0)
 
         self.set_blocks(
             Vec3(init_x, init_y, init_z),

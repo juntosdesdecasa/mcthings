@@ -17,18 +17,18 @@ class TestBuilding(TestBaseThing):
     """Test Building Thing"""
 
     def test_build(self):
-        self.renderer.server._mc.postToChat("Building a building")
+        World.renderer.post_to_chat("Building a building")
 
         pos = self.pos
 
         pos.x += 1
 
-        building = Building(pos, self.renderer)
+        building = Building(pos)
         building.block = mcpi.block.BEDROCK
         building.house_mirror = True
         building.build()
 
-        Building(building.end_position, self.renderer).build()
+        Building(building.end_position).build()
 
 
 if __name__ == "__main__":

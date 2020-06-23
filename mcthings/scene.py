@@ -22,7 +22,7 @@ class Scene:
     Minecraft server (fill the Scene.server attribute)
     """
 
-    def __init__(self, renderer):
+    def __init__(self):
         self.things = []
         """ map with the things in the scene """
         self._decorators = []
@@ -31,7 +31,6 @@ class Scene:
         """ position in the world of the scene """
         self._end_position = None
         """ end position in the world of the scene """
-        self._renderer = renderer
 
         World.add_scene(self)
 

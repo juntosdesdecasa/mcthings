@@ -11,7 +11,7 @@ class Circle(Thing):
     """ radius of the Sphere """
 
     def build(self):
-        World.drawing.drawCircle(
+        World.renderer.server.drawing.drawCircle(
             self.position.x,
             self.position.y,
             self.position.z,

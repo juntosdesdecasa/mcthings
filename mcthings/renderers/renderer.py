@@ -19,4 +19,25 @@ class Renderer:
         :param memory_chunk: chunk of blocks to be rendered
         :return:
         """
-        pass
+
+    def post_to_chat(self, message):
+        """
+        Send a message to the chat in the renderer it it exists
+        :param message:
+        :return:
+        """
+
+    def get_block(self, position):
+        """
+        Get the rendered block at the given position
+        :param position:
+        :return:
+        """
+
+    def get_blocks(self, init_pos, end_pos):
+        """
+        Get the rendered cuboid at init_pos and end_pos
+        :param init_pos:
+        :param end_pos:
+        :return:
+        """

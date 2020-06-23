@@ -148,17 +148,28 @@ class BlocksMemory:
 
         block_data = None
 
-        if init_pos.x > end_pos.x or \
-                init_pos.y > end_pos.y or \
-                init_pos.z > end_pos.z:
+        def find_min_max_cuboid_blocks():
+            # Find all vertex in the cuboid
+            # Find min and max blocks
+            min_pos_found = init_pos
+            max_pos_found = end_pos
+
+            return min_pos_found, max_pos_found
+
+        # TODO: Find the min and max blocks given two opposite vertex
+        min_pos, max_pos = find_min_max_cuboid_blocks()
+
+        if min_pos.x > max_pos.x or \
+                min_pos.y > max_pos.y or \
+                min_pos.z > max_pos.z:
             raise RuntimeError("Bad min an max vertex for cuboid")
 
-        size_x = end_pos.x - init_pos.x + 1
-        size_y = end_pos.y - init_pos.y + 1
-        size_z = end_pos.z - init_pos.z + 1
+        size_x = max_pos.x - min_pos.x + 1
+        size_y = max_pos.y - min_pos.y + 1
+        size_z = max_pos.z - min_pos.z + 1
 
         for y in range(0, size_y):
             for z in range(0, size_z):
                 for x in range(0, size_x):
-                    block_pos = Vec3(init_pos.x + x, init_pos.y + y, init_pos.z + z)
+                    block_pos = Vec3(min_pos.x + x, min_pos.y + y, min_pos.z + z)
                     self.set_block(block_pos, block, block_data)

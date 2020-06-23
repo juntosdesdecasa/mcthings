@@ -12,7 +12,7 @@ class Sphere(Thing):
     """ radius of the Sphere """
 
     def build(self):
-        World.drawing.drawSphere(
+        World.renderer.server.drawing.drawSphere(
             self.position.x + self.radius,
             self.position.y + self.radius - 1,
             self.position.z + self.radius,
@@ -33,7 +33,7 @@ class SphereHollow(Thing):
     height = 0
 
     def build(self):
-        World.drawing.drawHollowSphere(
+        World.renderer.server.drawing.drawHollowSphere(
             self.position.x + self.radius,
             self.position.y + self.radius - 1,
             self.position.z + self.radius,

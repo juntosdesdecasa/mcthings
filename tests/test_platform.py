@@ -19,21 +19,21 @@ class TestPlatform(TestBaseThing):
     """Test Platform Thing"""
 
     def test_build(self):
-        self.renderer.server._mc.postToChat("Building a platform")
+        World.renderer.post_to_chat("Building a platform")
 
         self.pos.z += 1
-        platform = Platform(self.pos, self.renderer)
+        platform = Platform(self.pos)
         platform.top_size = 7
         platform.height = 20
         platform.build()
 
-        block = Block(platform.end_position, self.renderer)
+        block = Block(platform.end_position)
         block.block = mcpi.block.BEDROCK
         block.build()
 
         p = Vec3(platform.end_position.x, platform.end_position.y + 1, platform.end_position.z)
-        World.server.entity.setTilePos(
-            self.renderer.server._mc.getPlayerEntityId(self.BUILDER_NAME),
+        World.renderer.server.mc.entity.setTilePos(
+            World.renderer.server.mc.getPlayerEntityId(self.BUILDER_NAME),
             p)
 
 

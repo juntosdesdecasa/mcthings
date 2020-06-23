@@ -6,9 +6,9 @@ from mcpi.vec3 import Vec3
 
 from ._version import __version__
 
-from .blocks_memory import BlocksMemory, BlockMemory
+from .blocks_memory import BlocksMemory
 from .scene import Scene
-from .utils import build_schematic_nbt, extract_region, size_region
+from .utils import build_schematic_nbt
 from .world import World
 
 
@@ -20,12 +20,11 @@ class Thing:
     _block_empty = mcpi.block.AIR
     """ block type used to remove blocks in this Thing """
 
-    def __init__(self, position, renderer, parent=None, scene=None):
+    def __init__(self, position, parent=None, scene=None):
         """
         Create a thing
         :param position: build position
         :param parent: parent Thing in which this one is included
-        :param renderer: renderer to use to render the Thing
         :param scene: scene in which this Thing is included
         """
 
@@ -36,7 +35,6 @@ class Thing:
         self._parent = parent
         self._position = None
         self._scene = scene
-        self._renderer = renderer
 
         if position:
             self._position = mcpi.vec3.Vec3(position.x, position.y, position.z)
@@ -44,7 +42,7 @@ class Thing:
         if scene is None:
             # If no Scenes exists yet, create a new one
             if not World.scenes:
-                Scene(self._renderer)  # Scene add itself to the World
+                Scene()  # Scene add itself to the World
 
             """ Use the default  Scene """
             self._scene = World.first_scene()
@@ -97,11 +95,10 @@ class Thing:
         """
         Render the Thing from memory (BlocksMemory) to show it
 
-        :param renderer: renderer to use to show the Thing
         :return:
         """
 
-        self._renderer.render(self._blocks_memory)
+        World.renderer.render(self._blocks_memory)
         for child in self._children:
             child.render()
 

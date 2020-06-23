@@ -15,28 +15,28 @@ class TestRotateSchematic(TestBaseThing):
     """Test to rotate an Schematic """
 
     def test_build(self):
-        self.renderer.server._mc.postToChat("Loading and building a schematic")
+        World.renderer.post_to_chat("Loading and building a schematic")
 
         pos = self.pos
 
         pos.x += 3
-        boat = Schematic(pos, self.renderer)
+        boat = Schematic(pos)
         boat.file_path = "schematics/pirate-boat.schematic"
         boat.build()
 
-        rot_boat = Schematic(pos, self.renderer)
+        rot_boat = Schematic(pos)
         rot_boat.file_path = "schematics/pirate-boat.schematic"
         rot_boat.create()
         rot_boat.rotate(90)
         rot_boat.render()
 
-        rot_boat = Schematic(pos, self.renderer)
+        rot_boat = Schematic(pos)
         rot_boat.file_path = "schematics/pirate-boat.schematic"
         rot_boat.create()
         rot_boat.rotate(180)
         rot_boat.render()
 
-        rot_boat = Schematic(pos, self.renderer)
+        rot_boat = Schematic(pos)
         rot_boat.file_path = "schematics/pirate-boat.schematic"
         rot_boat.create()
         rot_boat.rotate(270)

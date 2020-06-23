@@ -17,14 +17,14 @@ class TestCircle(TestBaseThing):
     """Test Circle Thing"""
 
     def test_build(self):
-        self.renderer.server._mc.postToChat("Building a circle")
+        World.renderer.post_to_chat("Building a circle")
 
         pos = self.pos
 
         radius = 10
         pos.z += 20
 
-        circle = Circle(pos, self.renderer)
+        circle = Circle(pos)
         circle.radius = radius
         circle.block = mcpi.block.BEDROCK
         circle.build()

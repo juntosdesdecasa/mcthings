@@ -7,6 +7,7 @@ from mcpi.minecraft import Minecraft
 import mcpi.block
 
 from mcthings.blocks_memory import BlocksMemory
+from mcthings.world import World
 
 
 class Decorator:
@@ -21,7 +22,6 @@ class Decorator:
 
     def __init__(self, thing):
         self._blocks_memory = BlocksMemory()
-        self._renderer = thing._renderer
         self._thing = thing
 
     def create(self):
@@ -44,7 +44,7 @@ class Decorator:
 
         :return:
         """
-        self._renderer.render(self._blocks_memory)
+        World.renderer.render(self._blocks_memory)
 
     def decorate(self):
         """

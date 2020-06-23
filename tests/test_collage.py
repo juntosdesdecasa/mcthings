@@ -18,16 +18,16 @@ class TestBlocks(TestBaseThing):
     """Test Collage Thing"""
 
     def test_build(self):
-        self.renderer.server._mc.postToChat("Building collage")
+        World.renderer.post_to_chat("Building collage")
 
         self.pos.z += 1
-        blocks = Collage(self.pos, self.renderer)
+        blocks = Collage(self.pos)
         blocks.build()
         assert len(blocks._blocks_memory.blocks) == 24
         assert blocks._blocks_memory.blocks[23].id == Block(42)
 
         self.pos.z += 10
-        blocks = Collage(self.pos, self.renderer)
+        blocks = Collage(self.pos)
         blocks.build()
 
         blocks.move(Vec3(self.pos.x+5, self.pos.y, self.pos.z))

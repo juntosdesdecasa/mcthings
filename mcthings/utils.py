@@ -37,8 +37,8 @@ def extract_region(init_pos, end_pos):
 
     size = size_region(init_pos, end_pos)
 
-    blocks = World.server.getBlocks(init_pos.x, init_pos.y, init_pos.z,
-                                    end_pos.x, end_pos.y, end_pos.z)
+    blocks = World.renderer.get_blocks(Vec3(init_pos.x, init_pos.y, init_pos.z),
+                                       Vec3(end_pos.x, end_pos.y, end_pos.z))
     blocks_list = list(blocks)
 
     # The order in getBlocks is z, x, y and for a Schematic it must be x, z, y

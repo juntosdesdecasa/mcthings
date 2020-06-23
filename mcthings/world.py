@@ -2,7 +2,6 @@
 # Author (©): Alvaro del Castillo
 
 # TODO: at some point this must be a real Singleton
-import pickle
 
 
 class World:
@@ -10,16 +9,22 @@ class World:
     A world is a container for all the scenes built using McThings. Its mapping
     is direct to Minecraft world concept.
 
-    Before adding Worlds to the World, it must be connected to a
-    Minecraft server (fill the World.server attribute)
+    Before adding Things to the World, it must have a renderer
     """
     scenes = []
+    """ Scenes included in the world """
+    renderer = None
+    """ Render used to render the scenes """
 
     @classmethod
-    def connect(cls, server):
-        # When the create->transform->render pipeline is complete remove next line
-        World.server = server.mc
-        World.drawing = server.drawing
+    def set_renderer(cls, renderer):
+        cls.renderer = renderer
+
+        # TODO: Hack for Minecraft renderer
+        from mcthings.renderers.raspberry_pi import RaspberryPi
+        if isinstance(renderer, RaspberryPi):
+            World.server = renderer.mc
+            World.drawing = renderer.drawing
 
     @classmethod
     def add_scene(cls, scene):
@@ -40,15 +45,5 @@ class World:
     @classmethod
     def unbuild(cls):
         """ Unbuild all the scenes inside the world """
-        for thing in cls.things:
-            thing.unbuild()
-
-    @classmethod
-    def load(cls, file_path):
-        """ Load a scene from a file (but no build it yet) """
-        World.scenes = pickle.load(open(file_path, "rb"))
-
-    @classmethod
-    def save(cls, file_path):
-        """ Save a scene to a file """
-        pickle.dump(World.scenes, open(file_path, "wb"))
+        for scene in cls.scene:
+            scene.unbuild()

@@ -19,17 +19,17 @@ class TestTown(TestBaseThing):
     """Test Town Thing"""
 
     def test_build(self):
-        self.renderer.server._mc.  postToChat("Building a town")
+        World.renderer.post_to_chat("Building a town")
 
         pos = self.pos
 
         pos.x += 1
 
-        town = Town(pos, self.renderer)
+        town = Town(pos)
         town.block = mcpi.block.BEDROCK
         town.build()
 
-        town = Town(Vec3(pos.x-5, pos.y, pos.z), self.renderer)
+        town = Town(Vec3(pos.x-5, pos.y, pos.z))
         town.block = mcpi.block.BEDROCK
         town.house_mirror = True
         town.build()

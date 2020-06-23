@@ -18,18 +18,18 @@ class TestHouse(TestBaseThing):
     """Test House Thing"""
 
     def test_build(self):
-        self.renderer.server._mc.postToChat("Building a house")
+        World.renderer.post_to_chat("Building a house")
 
         pos = self.pos
 
         pos.x += 1
 
-        house = House(pos, self.renderer)
+        house = House(pos)
         house.build()
 
         # Mirror house
         pos.x -= 10   # space between both houses
-        house = House(pos, self.renderer)
+        house = House(pos)
         house.mirror = True
         house.build()
         # Add lights

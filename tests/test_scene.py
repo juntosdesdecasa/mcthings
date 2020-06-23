@@ -16,16 +16,16 @@ class TestScene(TestBaseThing):
     """Test Scene Thing"""
 
     def test_build(self):
-        self.renderer.server._mc.postToChat("Building a scene")
+        World.renderer.post_to_chat("Building a scene")
 
         pos = self.pos
 
         pos.x += 1
-        block = Block(pos, self.renderer)
+        block = Block(pos)
         block.build()
 
         pos.x += 2
-        block = Block(pos, self.renderer)
+        block = Block(pos)
         block.build()
 
         pos.y += 1

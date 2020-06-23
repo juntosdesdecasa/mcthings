@@ -6,7 +6,6 @@ import sys
 
 import mcpi
 from mcpi.minecraft import Minecraft
-from mcpi.vec3 import Vec3
 from minecraftstuff import MinecraftDrawing
 
 from .renderer import Renderer
@@ -76,3 +75,12 @@ class RaspberryPi(Renderer):
             self.render_cuboid_memory(blocks_memory)
         else:
             self.render_memory(blocks_memory)
+
+    def post_to_chat(self, message):
+        self.server.mc.postToChat(message)
+
+    def get_block(self, pos):
+        return self.server.mc.getBlock(pos.x, pos.y, pos.z)
+
+    def get_blocks(self, init_pos, end_pos):
+        return self.server.mc.getBlocks(init_pos.x, init_pos.y, init_pos.z, end_pos.x, end_pos.y, end_pos.z)

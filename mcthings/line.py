@@ -20,7 +20,7 @@ class Line(Thing):
 
         # Find the type of land block destroyed with the line
         self._block_empty = \
-            mcpi.block.Block(World.server.getBlock(self.position.x, self.position.y-1, self.position.z), 0)
+            mcpi.block.Block(World.renderer.get_block(Vec3(self.position.x, self.position.y-1, self.position.z)), 0)
 
         self.set_blocks(Vec3(self.position.x, self.position.y-1, self.position.z),
                         Vec3(end_x, end_y, end_z),

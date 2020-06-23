@@ -17,13 +17,13 @@ class TestRiver(TestBaseThing):
     """Test River Thing"""
 
     def test_build(self):
-        self.renderer.server._mc.postToChat("Building a river")
+        World.renderer.post_to_chat("Building a river")
 
         pos = self.pos
 
         pos.x += 1
 
-        river = River(pos, self.renderer)
+        river = River(pos)
         river.width = 3
         river.depth = 3
         river.length = 5
@@ -31,7 +31,7 @@ class TestRiver(TestBaseThing):
         river.unbuild()
 
         pos = river.end_position
-        river = River(Vec3(pos.x, self.pos.y, pos.z), self.renderer)
+        river = River(Vec3(pos.x, self.pos.y, pos.z))
         river.depth = 3
         river.build()
 

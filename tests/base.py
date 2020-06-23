@@ -23,16 +23,14 @@ class TestBaseThing(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.renderer = RaspberryPi(cls.MC_SEVER_HOST, cls.MC_SEVER_PORT)
 
         try:
-            # TODO: remove this legacy code
-            World.connect(_Server(cls.MC_SEVER_HOST, cls.MC_SEVER_PORT))
+            World.renderer = RaspberryPi(cls.MC_SEVER_HOST, cls.MC_SEVER_PORT)
         except mcpi.connection.RequestError:
             logging.error("Can't connect to Minecraft server " + cls.MC_SEVER_HOST)
             sys.exit(1)
 
     def setUp(self):
-        server = self.renderer.server
+        server = World.renderer.server
         self.pos = server.mc.entity.getTilePos(server.mc.getPlayerEntityId(self.BUILDER_NAME))
 

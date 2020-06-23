@@ -20,16 +20,16 @@ class TestPyramid(TestBaseThing):
     """Test Pyramid Thing"""
 
     def test_build(self):
-        self.renderer.server._mc.postToChat("Building a pyramid")
+        World.renderer.post_to_chat("Building a pyramid")
 
         pos = self.pos
 
-        pyramid = Pyramid(pos, self.renderer)
+        pyramid = Pyramid(pos)
         pyramid.height = 5
         pyramid.block = mcpi.block.SAND
         pyramid.build()
 
-        pyramid = Pyramid(pyramid.end_position, self.renderer)
+        pyramid = Pyramid(pyramid.end_position)
         pyramid.block = mcpi.block.BEDROCK
         pyramid.height = 3
         pyramid.build()
@@ -37,7 +37,7 @@ class TestPyramid(TestBaseThing):
         pyramid.move(Vec3(pyramid.position.x, FLAT_WORLD_GROUND_HEIGHT,
                           pyramid.position.z))
 
-        pyramid = PyramidHollow(Vec3(pos.x + 20, pos.y, pos.z), self.renderer)
+        pyramid = PyramidHollow(Vec3(pos.x + 20, pos.y, pos.z))
         pyramid.block = mcpi.block.WOOD
         pyramid.build()
 
