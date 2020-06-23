@@ -184,7 +184,7 @@ class Thing:
         for decorator in self._decorators:
             decorator(self).decorate()
             for child in self._children:
-                decorator.decorate(child)
+                decorator(child).decorate()
 
     def find_bounding_box(self):
         """ Compute the bounding box of the Thing """
