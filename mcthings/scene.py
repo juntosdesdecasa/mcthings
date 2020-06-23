@@ -6,6 +6,7 @@ import pickle
 
 from mcpi.vec3 import Vec3
 
+from mcthings.blocks_memory import BlocksMemory
 from mcthings.utils import build_schematic_nbt
 from mcthings.world import World
 
@@ -79,6 +80,11 @@ class Scene:
         for thing in self.things:
             thing.unbuild()
 
+    def create(self):
+        """ Create all the things inside the Scene """
+        for thing in self.things:
+            thing.create()
+
     def reposition(self, position):
         """
         Move all the things in the scene to a new relative position
@@ -119,7 +125,19 @@ class Scene:
 
     def save(self, file_path):
         """ Save a scene to a file """
+
+        def clean_memory(thing):
+            for child in thing._children:
+                clean_memory(child)
+            thing._blocks_memory = BlocksMemory()
+
+        # Clean the blocks_memory: it is not needed to recreate the scene
+        for thing in self.things:
+            clean_memory(thing)
         pickle.dump(self.things, open(file_path, "wb"))
+
+        # Reload the memory
+        self.create()
 
     def find_bounding_box(self):
         """ Compute the bounding box of the Scene """
