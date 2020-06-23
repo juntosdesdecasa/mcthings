@@ -9,5 +9,5 @@ from .thing import Thing
 class Block(Thing):
 
     def create(self):
-        self.set_block(Vec3(self.position.x, self.position.y, self.position.z), self.block)
+        self.set_block(Vec3(self.position.x, self.position.y, self.position.z), self.block.id)
         self._end_position = self.position

@@ -20,12 +20,12 @@ class Platform(Thing):
         base_z = p.z + math.floor(self.top_size/2)
         self.set_blocks(Vec3(base_x, p.y, base_z),
                         Vec3(base_x, p.y + self.height - 1, base_z),
-                        self.block)
+                        self.block.id)
 
         # Top
         self.set_blocks(Vec3(p.x, p.y + self.height, p.z),
                         Vec3(p.x + self.top_size - 1, p.y + self.height, p.z + self.top_size - 1),
-                        self.block)
+                        self.block.id)
 
         self._end_position = Vec3(p.x + self.top_size - 1,
                                   p.y + self.height,

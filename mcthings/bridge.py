@@ -43,4 +43,4 @@ class Bridge(Thing):
 
             self.set_block(
                 Vec3(self.position.x + x, self.position.y + final_y, self.position.z + z),
-                self.block)
+                self.block.id)

@@ -33,7 +33,7 @@ class House(Thing):
         self.set_blocks(
             Vec3(init_x, init_y, init_z),
             Vec3(end_x, end_y, end_z),
-            self.block)
+            self.block.id)
 
         # Fill the cube with air so it becomes a kind of house
         init_x_empty = init_x + self.wall_width
@@ -43,13 +43,13 @@ class House(Thing):
             Vec3(end_x_empty,
                  end_y - self.wall_width,
                  end_z - self.wall_width),
-            mcpi.block.AIR)
+            mcpi.block.AIR.id)
 
         init_door_x = init_x
         if self.mirror:
             init_door_x = end_x
         init_door = Vec3(init_door_x, init_y, init_z + self.wall_width)
         end_door = Vec3(init_door_x + self.wall_width, init_y + self.door_size + 1, init_z + self.wall_width + self.door_size)
-        self.set_blocks(init_door, end_door, mcpi.block.AIR)
+        self.set_blocks(init_door, end_door, mcpi.block.AIR.id)
 
         self._end_position = Vec3(end_x, end_y, end_z)

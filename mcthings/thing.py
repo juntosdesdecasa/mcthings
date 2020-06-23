@@ -78,12 +78,12 @@ class Thing:
         """ Add a children to this Thing  """
         self._children.append(child)
 
-    def set_block(self, pos, block, data=None):
-        self._blocks_memory.set_block(pos, block, data)
+    def set_block(self, pos, block_id, block_data=None):
+        self._blocks_memory.set_block(pos, block_id, block_data)
 
-    def set_blocks(self, init_pos, end_pos, block):
+    def set_blocks(self, init_pos, end_pos, block_id):
         """ Add a cuboid with the same block for all blocks and without specific data"""
-        self._blocks_memory.set_blocks(init_pos, end_pos, block)
+        self._blocks_memory.set_blocks(init_pos, end_pos, block_id)
 
     def create(self):
         """

@@ -22,7 +22,7 @@ class Collage(Thing):
                     block = self.block
                     if self.block != self._block_empty:
                         block = self.change_blocks[count % len(self.change_blocks)]
-                    self.set_block(Vec3(p.x + x, p.y + y, p.z + z), block)
+                    self.set_block(Vec3(p.x + x, p.y + y, p.z + z), block.id)
                     count += 1
 
         self._end_position = Vec3(p.x + self.width - 1, p.y + self.height - 1, p.z + self.length - 1)

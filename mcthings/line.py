@@ -24,6 +24,6 @@ class Line(Thing):
 
         self.set_blocks(Vec3(self.position.x, self.position.y-1, self.position.z),
                         Vec3(end_x, end_y, end_z),
-                        self.block)
+                        self.block.id)
 
         self._end_position = Vec3(end_x, end_y + 1, end_z)

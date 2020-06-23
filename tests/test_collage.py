@@ -24,7 +24,7 @@ class TestBlocks(TestBaseThing):
         blocks = Collage(self.pos)
         blocks.build()
         assert len(blocks._blocks_memory.blocks) == 24
-        assert blocks._blocks_memory.blocks[23].id == Block(42)
+        assert blocks._blocks_memory.blocks[23].id == 42
 
         self.pos.z += 10
         blocks = Collage(self.pos)

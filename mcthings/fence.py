@@ -45,15 +45,15 @@ class Fence(Thing):
         self.set_blocks(
             Vec3(init_x, init_y, init_z),
             Vec3(end_x, end_y, end_z),
-            self.block)
+            self.block.id)
 
         # Fill the prism with air to became a rectangular wall
         self.set_blocks(
             Vec3(init_x + self.thick, init_y, init_z + self.thick),
             Vec3(end_x - self.thick, end_y, end_z - self.thick),
-            mcpi.block.AIR)
+            mcpi.block.AIR.id)
 
         # Rebuild the thing because it is destroyed when emptying the fence
         # if we are not removing the fence
-        if self.block != mcpi.block.AIR:
+        if self.block.id != mcpi.block.AIR.id:
             self.thing.create()

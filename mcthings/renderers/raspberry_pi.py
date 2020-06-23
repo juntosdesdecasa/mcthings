@@ -53,13 +53,13 @@ class RaspberryPi(Renderer):
 
     def render_cuboid_memory(self, memory):
         """ Render a memory with all blocks equal in a filled cuboid """
-        block = memory.blocks[0].id
+        block = memory.blocks[0]
 
         init_pos, end_pos = memory.find_init_end_pos()
 
         self.server.mc.setBlocks(init_pos.x, init_pos.y, init_pos.z,
                                  end_pos.x, end_pos.y, end_pos.z,
-                                 block)
+                                 block.id)
 
     def render_memory(self, memory):
         """ Render memory """

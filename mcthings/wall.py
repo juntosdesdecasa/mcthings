@@ -16,4 +16,4 @@ class Wall(Thing):
             Vec3(self.position.x + self.length - 1,
                  self.position.y + self.height - 1,
                  self.position.z + self.width - 1),
-            self.block)
+            self.block.id)

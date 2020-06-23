@@ -88,8 +88,6 @@ class BlocksMemory:
             last_block = memory.blocks[0]
 
             for block in memory.blocks:
-                if isinstance(block.id, int):
-                    block
                 if block.id != last_block.id or block.data != last_block.data:
                     equal = False
                     break
@@ -140,11 +138,11 @@ class BlocksMemory:
         for rotated_block in rotated_blocks:
             self.set_block(rotated_block.pos, rotated_block.id, rotated_block.data)
 
-    def set_block(self, pos, block, data=None):
-        self.add(BlockMemory(block, data, pos))
+    def set_block(self, pos, block_id, block_data=None):
+        self.add(BlockMemory(block_id, block_data, pos))
 
-    def set_blocks(self, init_pos, end_pos, block):
-        """ Add a cuboid with the same block for all blocks and without specific data"""
+    def set_blocks(self, init_pos, end_pos, block_id):
+        """ Add a cuboid with the same block for all blocks and without specific data """
 
         block_data = None
 
@@ -172,4 +170,4 @@ class BlocksMemory:
             for z in range(0, size_z):
                 for x in range(0, size_x):
                     block_pos = Vec3(min_pos.x + x, min_pos.y + y, min_pos.z + z)
-                    self.set_block(block_pos, block, block_data)
+                    self.set_block(block_pos, block_id, block_data)

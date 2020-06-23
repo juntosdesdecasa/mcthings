@@ -22,7 +22,7 @@ class Pyramid(Thing):
                 Vec3(p.x + (length - 1) - level,
                      p.y + level,
                      p.z + (width - 1) - level),
-                self.block)
+                self.block.id)
 
         self._end_position = Vec3(p.x + (length - 1),
                                   p.y + self.height - 1,
